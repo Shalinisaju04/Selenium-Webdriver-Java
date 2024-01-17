@@ -1,0 +1,91 @@
+package webpageTestingBasicsPackage;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.testng.Assert;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import com.opencsv.CSVReader;
+
+public class LoginPageDataDrivenUsingCSVTest extends AbstractWebDriverTest {
+	// Creating DATAPROVIDER and giving it a name to pass all the usernames and its
+	// passwords
+	// passwords
+	@DataProvider(name = "userIDAndPasswordCSVDataProvide")
+	public Iterator<String[]> userIDAndPasswordCsvDP() {
+
+		return readFromCsvFile("./src/test/resources/LoginData.csv").iterator();
+
+	}
+
+	// USING THE DATAPROVIDER
+	@Test(dataProvider = "userIDAndPasswordCSVDataProvide")
+	public void testPositiveLoginScenerios(String UserName, String Password, String Issuccessful) {
+		boolean IsLoginSuccessful = Boolean.valueOf(Issuccessful);
+		// Verify if a user will be able to login with a valid username and valid &
+		// password.
+		driver.get("https://www.saucedemo.com/");
+		WebElement userNameFeild = driver.findElement(By.id("user-name"));
+		userNameFeild.sendKeys(UserName);
+		WebElement password = driver.findElement(By.id("password"));
+		password.sendKeys(Password);
+		WebElement loginButton = driver.findElement(By.id("login-button"));
+		loginButton.submit();
+		sleep(2);
+		if (IsLoginSuccessful) {
+		// After successful login Logo,Products and Cart will be displayed
+		// VERIFY lOGO Present
+		WebElement logo = driver.findElement(By.className("app_logo"));
+		Assert.assertEquals(true, logo.isDisplayed());
+		// Verify Title Products is present
+		WebElement productMenu = driver.findElement(By.className("title"));
+		Assert.assertEquals(true, productMenu.isDisplayed());
+		// Verify cart is present
+		WebElement cart = driver.findElement(By.id("shopping_cart_container"));
+		Assert.assertEquals(true, cart.isDisplayed());
+	} else {
+		// Following negative scenarios are verified
+		// 1. Verify if a user cannot login with a valid username and an invalid
+		// password.
+		// 2. Verify that a user cannot login, when the both fields are blank and Submit
+		// button is clicked.
+		// 3. Verify if a user cannot login with a invalid username and an valid
+		// password.
+		// 4. Verify that a user cannot login, if any of the feilds (either user name or
+		// password) is blank and Submit button is clicked
+		WebElement userList = driver.findElement(By.id("login_credentials"));
+		userList.isDisplayed();
+
+
+	}
+
+  }
+@Test
+public void testReadingDataFromCsv() throws IOException {
+	List<String[]> data = readFromCsvFile("./src/test/resources/LoginData.csv");
+	for (String row[] : data) {
+		System.out.println(Arrays.toString(row));// display the data in the string
+
+}
+}
+
+private List<String[]> readFromCsvFile(String CsvFilePath) {
+	try {
+	CSVReader reader = new CSVReader(new FileReader(CsvFilePath));// Create a CSV reader and refactered CSV path
+	List<String[]> data = reader.readAll();
+	return data;
+} catch (Exception e) {
+	e.printStackTrace();
+	throw new RuntimeException(e);// to avoid throw
+}
+}
+}
+
+
