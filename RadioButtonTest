@@ -1,0 +1,89 @@
+package webpageTestingBasicsPackage;
+
+import java.time.Duration;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.testng.annotations.Test;
+
+public class RadioButtonTest extends AbstractWebDriverTest {
+  @Test
+	public void RadioButtonTestCase() {
+		driver.get("http://test.rubywatir.com/radios.php");
+		// Mazimize current window
+
+		driver.manage().window().maximize();
+
+		// to perform Scroll on application using Selenium
+
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
+
+
+		// reading all values of all the radio button
+
+		List<WebElement> options = driver.findElements(By.name("likeit"));
+		for (WebElement option : options) {
+			System.out.println(option.getAttribute("value") + " " + option.isSelected());
+		}
+
+  }
+
+	@Test
+	public void RadioButtonTestCaseWithAFrameworkMethod() {
+		driver.get("http://test.rubywatir.com/radios.php");
+		// Mazimize current window
+
+		driver.manage().window().maximize();
+
+		// to perform Scroll on application using Selenium
+
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
+
+		// reading all values of all the radio button
+
+		System.out.println(getRadioButtonValue("likeit"));
+
+	}
+
+//Clicking the radio button
+	@Test
+	public void setValueForRadioButton() {
+		driver.get("http://test.rubywatir.com/radios.php");
+		List<WebElement> options = driver.findElements(By.name("likeit"));
+		for (WebElement option : options) {
+			if (option.getAttribute("value").equals("Not sure")) {
+				option.click();
+			}
+		}
+	}
+
+	@Test
+	// Creating Framework method to enable a radio button
+	public void setValueForRadioButtonFrameworkMethod() {
+		driver.get("http://test.rubywatir.com/radios.php");
+		setRadioButtonValue("likeit", "Not sure");
+		setRadioButtonValue("likeit", "Nope");
+		sleep(2);
+	}
+
+	private void setRadioButtonValue(String RadioButtonName, String vaueToSet) {
+		List<WebElement> options = driver.findElements(By.name(RadioButtonName));
+		for (WebElement option : options) {
+			if (option.getAttribute("value").equals(vaueToSet)) {
+				option.click();
+			}
+		}
+	}
+
+//Getting all the options and checking whether any of the options are selected and returning its value
+	private String getRadioButtonValue(String name) {
+		List<WebElement> options = driver.findElements(By.name(name));
+		for (WebElement option : options) {
+			if (option.isSelected()) {
+				return option.getAttribute("value");
+			}
+		}
+		return null;
+	}
+}
