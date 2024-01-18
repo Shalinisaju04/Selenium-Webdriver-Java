@@ -1,0 +1,87 @@
+package webpageTestingBasicsPackage;
+
+import static org.testng.Assert.assertFalse;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
+import org.testng.annotations.Test;
+
+@Test
+public class CheckBoxAndUtilityMethodTC extends AbstractWebDriverTest {
+
+	// Checkbox testing
+
+	@Test
+	public void CheckboxTesting() {
+		driver.get("https://www.flexjobs.com/members/employers/signup");
+		// Mazimize current window
+		driver.manage().window().maximize();
+		// to perform Scroll on application using Selenium
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0,350)", "");
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
+		WebElement checkbox1 = driver.findElement(By.id("updates"));
+		WebElement checkbox2 = driver.findElement(By.id("priv"));
+	
+		// Verify that both checkboxes are unchecked initially
+
+		assertFalse(checkbox1.isSelected());
+		assertFalse(checkbox2.isSelected());
+		
+		
+	}
+	@Test
+	// Creating Framework Utility Method for checking a CheckBox in Automation Tests
+	public void checkACheckBox() {
+		driver.get("https://www.flexjobs.com/members/employers/signup");
+		// Mazimize current window
+		driver.manage().window().maximize();
+		// to perform Scroll on application using Selenium
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0,350)", "");
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
+		checkACheckbox("updates");
+		checkACheckbox("priv");
+		sleep(3);
+	}
+
+	@Test
+	// Creating Framework Utility Method for Unchecking a CheckBox in Automation
+	// Tests
+	public void unCheckACheckBox() {
+		driver.get("https://www.flexjobs.com/members/employers/signup");
+		// Mazimize current window
+		driver.manage().window().maximize();
+		// to perform Scroll on application using Selenium
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0,350)", "");
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
+		unCheckACheckbox("updates");
+		unCheckACheckbox("priv");
+		sleep(3);
+	}
+
+	private void checkACheckbox(String checkboxName) {
+		WebElement checkbox1 = driver.findElement(By.id(checkboxName));
+		sleep(3);
+		boolean currentValue = checkbox1.isSelected();
+		if(currentValue==false) {
+			checkbox1.click();
+
+		}
+	}
+
+	private void unCheckACheckbox(String checkboxName) {
+		WebElement checkbox1 = driver.findElement(By.id(checkboxName));
+		sleep(3);
+		boolean currentValue = checkbox1.isSelected();
+		if (currentValue == true) {
+			checkbox1.click();
+
+		}
+	}
+	}
+
