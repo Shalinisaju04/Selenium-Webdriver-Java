@@ -1,0 +1,68 @@
+package webpageTestingBasicsPackage;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.annotations.Test;
+
+@Test
+public class SelectBoxTestCases extends AbstractWebDriverTest {
+	public void SelectBox() {
+		driver.get("https://www.blsindia-canada.com/appointmentbls/appointment.php");
+
+		// Mazimize current window
+		driver.manage().window().maximize();
+		// TEST FEILD
+		WebElement selectElement = driver.findElement(By.id("location"));
+		Select select = new Select(selectElement);
+		// Verify whether the select box is multi select box
+
+		boolean selectBoxvalue = select.isMultiple();
+		System.out.println(select.isMultiple());
+
+		// Verify that select box is not multi select
+
+		assertFalse(selectBoxvalue);
+
+		// Verify that the default option is "Select"
+		String defaultValue = select.getFirstSelectedOption().getText();
+
+		assertEquals(defaultValue, "Select");
+		sleep(2);
+		// Selecting values from a select box
+		select.selectByIndex(4);
+		sleep(3);
+
+  }
+
+	@Test
+	public void MultiSelectBox() {
+		sleep(2);
+		driver.get("https://demoqa.com/select-menu");
+		driver.manage().window().maximize();
+		// TEST FEILD
+		WebElement selectElement = driver.findElement(By.id("cars"));
+		Select select = new Select(selectElement);
+		// Verify whether the select box is multi select box
+
+		boolean multiSelectBoxvalue = select.isMultiple();
+		System.out.println(select.isMultiple());
+
+		// Verify that select box is not multi select
+
+		assertTrue(multiSelectBoxvalue);
+// Printing all the values in MultiSelect box
+		for (WebElement element : select.getOptions()) {
+			System.out.println(element.getText());
+		}
+		// Selecting values from a Multiselect box
+		select.selectByValue("volvo");
+		select.selectByValue("opel");
+		sleep(3);
+	}
+
+}
