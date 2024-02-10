@@ -1,0 +1,290 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
+import org.testng.annotations.Ignore;
+import org.testng.annotations.Test;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class EcommerceAppCrossBrowser {
+  @Test
+	public void firefoxBrowser() {
+		// System.setProperty("webdriver.gecko.driver","C:\\Users\\User\\OneDrive\\Documents\\geckodriver-v0.34.0-win64\\geckodriver.exe"
+		// );
+		// WebDriver driver= new FirefoxDriver;
+		WebDriverManager.firefoxdriver().setup();
+		WebDriver driver = new FirefoxDriver();
+		driver.get("https://www.saucedemo.com/");
+		driver.manage().window().maximize();
+		WebElement userName = driver.findElement(By.id("user-name"));
+		userName.sendKeys("standard_user");
+		WebElement pwd = driver.findElement(By.id("password"));
+		WebElement submit = driver.findElement(By.id("login-button"));
+		submit.click();
+		sleep(2);
+		WebElement errormessage = driver.findElement(By.tagName("h3"));
+		// System.out.println(errormessage.getText());
+		Assert.assertEquals("Epic sadface: Password is required", errormessage.getText());
+		userName.clear();
+		userName.sendKeys("standard_user");
+		pwd.sendKeys("secret_sauce");
+		submit.click();
+		// VERIFY lOGO Present
+		WebElement logo = driver.findElement(By.className("app_logo"));
+		Assert.assertEquals(true, logo.isDisplayed());
+		// Verify Title Products is present
+		WebElement productMenu = driver.findElement(By.className("title"));
+		Assert.assertEquals(true, productMenu.isDisplayed());
+		// Verify cart is present
+		WebElement cart = driver.findElement(By.id("shopping_cart_container"));
+		Assert.assertEquals(true, cart.isDisplayed());
+		Select select = new Select(driver.findElement(By.tagName("select")));
+		// List<WebElement> allOptions = select.getOptions()
+
+		sleep(2);
+		select.selectByValue("hilo");
+		WebElement element = driver.findElement(By.linkText("Sauce Labs Fleece Jacket"));
+		Actions act = new Actions(driver);
+		act.moveToElement(element).click().perform();
+		sleep(7);
+		driver.findElement(By.id("add-to-cart-sauce-labs-fleece-jacket")).click();
+		sleep(2);
+		driver.findElement(By.id("shopping_cart_container")).click();
+		sleep(7);
+		// Verify the Your Cart page
+		driver.findElement(By.className("cart_quantity_label")).isDisplayed();
+		driver.findElement(By.className("inventory_item_desc")).isDisplayed();
+		driver.findElement(By.className("inventory_item_price")).isDisplayed();
+		driver.findElement(By.id("remove-sauce-labs-fleece-jacket")).isDisplayed();
+		driver.findElement(By.className("cart_quantity_label")).isDisplayed();
+		driver.findElement(By.className("cart_desc_label")).isDisplayed();
+		driver.findElement(By.id("continue-shopping")).isDisplayed();
+		driver.findElement(By.id("checkout")).isDisplayed();
+
+		// Verify the Checkout page
+
+		driver.findElement(By.id("checkout")).click();
+		driver.findElement(By.className("title")).isDisplayed();
+		driver.findElement(By.id("first-name")).isDisplayed();
+		driver.findElement(By.id("last-name")).isDisplayed();
+		driver.findElement(By.id("postal-code")).isDisplayed();
+		driver.findElement(By.id("cancel")).isDisplayed();
+		driver.findElement(By.id("continue")).isDisplayed();
+		// Verify that all the mandator feilds are filled while checking out
+
+		// Verify the error message when all the feilds are blank
+		driver.findElement(By.id("continue")).click();
+		String error = driver.findElement(By.xpath("//div[@id='checkout_info_container']/div/form/div/div[4]/h3"))
+				.getText();
+		Assert.assertEquals("Error: First Name is required", error);
+		// Verify when all the feilds are filled
+		driver.findElement(By.id("first-name")).sendKeys("Shalini");
+		driver.findElement(By.id("last-name")).sendKeys("Saju");
+		driver.findElement(By.id("postal-code")).sendKeys("L7A 3W6");
+		driver.findElement(By.id("continue")).click();
+		// Verify Checkout: Overview page
+		driver.findElement(By.className("cart_quantity_label")).isDisplayed();
+		driver.findElement(By.className("inventory_item_desc")).isDisplayed();
+		driver.findElement(By.className("inventory_item_price")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[2]")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[3]")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[4]")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[5]")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[6]")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[7]")).isDisplayed();
+		driver.findElement(By.id("finish")).click();
+		driver.quit();
+	}
+
+	@Test
+	public void EdgeBrowser() {
+		WebDriverManager.edgedriver().setup();
+		WebDriver driver = new EdgeDriver();
+		driver.get("https://www.saucedemo.com/");
+		driver.manage().window().maximize();
+		WebElement userName = driver.findElement(By.id("user-name"));
+		userName.sendKeys("standard_user");
+		WebElement pwd = driver.findElement(By.id("password"));
+		WebElement submit = driver.findElement(By.id("login-button"));
+		submit.click();
+		sleep(2);
+		WebElement errormessage = driver.findElement(By.tagName("h3"));
+		// System.out.println(errormessage.getText());
+		Assert.assertEquals("Epic sadface: Password is required", errormessage.getText());
+		userName.clear();
+		userName.sendKeys("standard_user");
+		pwd.sendKeys("secret_sauce");
+		submit.click();
+		// VERIFY lOGO Present
+		WebElement logo = driver.findElement(By.className("app_logo"));
+		Assert.assertEquals(true, logo.isDisplayed());
+		// Verify Title Products is present
+		WebElement productMenu = driver.findElement(By.className("title"));
+		Assert.assertEquals(true, productMenu.isDisplayed());
+		// Verify cart is present
+		WebElement cart = driver.findElement(By.id("shopping_cart_container"));
+		Assert.assertEquals(true, cart.isDisplayed());
+		Select select = new Select(driver.findElement(By.tagName("select")));
+		// List<WebElement> allOptions = select.getOptions()
+
+		sleep(2);
+		select.selectByValue("hilo");
+		WebElement element = driver.findElement(By.linkText("Sauce Labs Fleece Jacket"));
+		Actions act = new Actions(driver);
+		act.moveToElement(element).click().perform();
+		sleep(7);
+		driver.findElement(By.id("add-to-cart-sauce-labs-fleece-jacket")).click();
+		sleep(2);
+		driver.findElement(By.id("shopping_cart_container")).click();
+		sleep(7);
+		// Verify the Your Cart page
+		driver.findElement(By.className("cart_quantity_label")).isDisplayed();
+		driver.findElement(By.className("inventory_item_desc")).isDisplayed();
+		driver.findElement(By.className("inventory_item_price")).isDisplayed();
+		driver.findElement(By.id("remove-sauce-labs-fleece-jacket")).isDisplayed();
+		driver.findElement(By.className("cart_quantity_label")).isDisplayed();
+		driver.findElement(By.className("cart_desc_label")).isDisplayed();
+		driver.findElement(By.id("continue-shopping")).isDisplayed();
+		driver.findElement(By.id("checkout")).isDisplayed();
+
+		// Verify the Checkout page
+
+		driver.findElement(By.id("checkout")).click();
+		driver.findElement(By.className("title")).isDisplayed();
+		driver.findElement(By.id("first-name")).isDisplayed();
+		driver.findElement(By.id("last-name")).isDisplayed();
+		driver.findElement(By.id("postal-code")).isDisplayed();
+		driver.findElement(By.id("cancel")).isDisplayed();
+		driver.findElement(By.id("continue")).isDisplayed();
+		// Verify that all the mandator feilds are filled while checking out
+
+		// Verify the error message when all the feilds are blank
+		driver.findElement(By.id("continue")).click();
+		String error = driver.findElement(By.xpath("//div[@id='checkout_info_container']/div/form/div/div[4]/h3"))
+				.getText();
+		Assert.assertEquals("Error: First Name is required", error);
+		// Verify when all the feilds are filled
+		driver.findElement(By.id("first-name")).sendKeys("Shalini");
+		driver.findElement(By.id("last-name")).sendKeys("Saju");
+		driver.findElement(By.id("postal-code")).sendKeys("L7A 3W6");
+		driver.findElement(By.id("continue")).click();
+		// Verify Checkout: Overview page
+		driver.findElement(By.className("cart_quantity_label")).isDisplayed();
+		driver.findElement(By.className("inventory_item_desc")).isDisplayed();
+		driver.findElement(By.className("inventory_item_price")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[2]")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[3]")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[4]")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[5]")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[6]")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[7]")).isDisplayed();
+		driver.findElement(By.id("finish")).click();
+		driver.quit();
+	}
+
+	@Test
+	public void IEBrowser() {
+		WebDriverManager.iedriver().setup();
+		WebDriver driver = new InternetExplorerDriver();
+		driver.get("https://www.saucedemo.com/");
+		driver.manage().window().maximize();
+		WebElement userName = driver.findElement(By.id("user-name"));
+		userName.sendKeys("standard_user");
+		WebElement pwd = driver.findElement(By.id("password"));
+		WebElement submit = driver.findElement(By.id("login-button"));
+		submit.click();
+		sleep(2);
+		WebElement errormessage = driver.findElement(By.tagName("h3"));
+		// System.out.println(errormessage.getText());
+		Assert.assertEquals("Epic sadface: Password is required", errormessage.getText());
+		userName.clear();
+		userName.sendKeys("standard_user");
+		pwd.sendKeys("secret_sauce");
+		submit.click();
+		// VERIFY lOGO Present
+		WebElement logo = driver.findElement(By.className("app_logo"));
+		Assert.assertEquals(true, logo.isDisplayed());
+		// Verify Title Products is present
+		WebElement productMenu = driver.findElement(By.className("title"));
+		Assert.assertEquals(true, productMenu.isDisplayed());
+		// Verify cart is present
+		WebElement cart = driver.findElement(By.id("shopping_cart_container"));
+		Assert.assertEquals(true, cart.isDisplayed());
+		Select select = new Select(driver.findElement(By.tagName("select")));
+		// List<WebElement> allOptions = select.getOptions()
+
+		sleep(2);
+		select.selectByValue("hilo");
+		WebElement element = driver.findElement(By.linkText("Sauce Labs Fleece Jacket"));
+		Actions act = new Actions(driver);
+		act.moveToElement(element).click().perform();
+		sleep(7);
+		driver.findElement(By.id("add-to-cart-sauce-labs-fleece-jacket")).click();
+		sleep(2);
+		driver.findElement(By.id("shopping_cart_container")).click();
+		sleep(7);
+		// Verify the Your Cart page
+		driver.findElement(By.className("cart_quantity_label")).isDisplayed();
+		driver.findElement(By.className("inventory_item_desc")).isDisplayed();
+		driver.findElement(By.className("inventory_item_price")).isDisplayed();
+		driver.findElement(By.id("remove-sauce-labs-fleece-jacket")).isDisplayed();
+		driver.findElement(By.className("cart_quantity_label")).isDisplayed();
+		driver.findElement(By.className("cart_desc_label")).isDisplayed();
+		driver.findElement(By.id("continue-shopping")).isDisplayed();
+		driver.findElement(By.id("checkout")).isDisplayed();
+
+		// Verify the Checkout page
+
+		driver.findElement(By.id("checkout")).click();
+		driver.findElement(By.className("title")).isDisplayed();
+		driver.findElement(By.id("first-name")).isDisplayed();
+		driver.findElement(By.id("last-name")).isDisplayed();
+		driver.findElement(By.id("postal-code")).isDisplayed();
+		driver.findElement(By.id("cancel")).isDisplayed();
+		driver.findElement(By.id("continue")).isDisplayed();
+		// Verify that all the mandator feilds are filled while checking out
+
+		// Verify the error message when all the feilds are blank
+		driver.findElement(By.id("continue")).click();
+		String error = driver.findElement(By.xpath("//div[@id='checkout_info_container']/div/form/div/div[4]/h3"))
+				.getText();
+		Assert.assertEquals("Error: First Name is required", error);
+		// Verify when all the feilds are filled
+		driver.findElement(By.id("first-name")).sendKeys("Shalini");
+		driver.findElement(By.id("last-name")).sendKeys("Saju");
+		driver.findElement(By.id("postal-code")).sendKeys("L7A 3W6");
+		driver.findElement(By.id("continue")).click();
+		// Verify Checkout: Overview page
+		driver.findElement(By.className("cart_quantity_label")).isDisplayed();
+		driver.findElement(By.className("inventory_item_desc")).isDisplayed();
+		driver.findElement(By.className("inventory_item_price")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[2]")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[3]")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[4]")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[5]")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[6]")).isDisplayed();
+		driver.findElement(By.xpath("//div[@id='checkout_summary_container']/div/div[2]/div[7]")).isDisplayed();
+		driver.findElement(By.id("finish")).click();
+		driver.quit();
+	}
+
+	private void sleep(int seconds) {
+		// TODO Auto-generated method stub
+		try {
+			Thread.sleep(seconds * 1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+  }
+
